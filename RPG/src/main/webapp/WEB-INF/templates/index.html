@@ -10,6 +10,22 @@
 <body>
     <h1>Welcome to the RPG</h1>
     <!--/*@thymesVar id="map" type="java.util.List"*/-->
-    <p th:each="row : ${map}" th:text="${row}"></p>
+    <span style="display: inline-block" th:each="row : ${map}" class="tile">
+        <span th:each="col : ${row}" th:class="(${col} == '1') ? 'wall': 'space'">0</span>
+    </span>
 </body>
 </html>
+
+<style>
+    .wall {
+        padding: 2px;
+        width: 5px;
+        background-color: black;
+    }
+    .space {
+        color: green;
+        padding: 2px;
+        width: 5px;
+        background-color: green;
+    }
+</style>
