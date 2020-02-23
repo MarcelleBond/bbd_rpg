@@ -1,25 +1,24 @@
-package com.bbd.RPG.controllers;
+package com.bbd.RPG.restcontrollers;
 
 import com.bbd.RPG.services.MapService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/view/map")
+@RestController
+@RequestMapping("/api/map")
 public class MapController {
+
     private MapService mapService;
-    public MapController(MapService mapService){
+
+    public MapController(MapService mapService) {
         this.mapService = mapService;
     }
 
-    @GetMapping("/test")
-    public String test(Model model){
-        model.addAttribute("message", "This works, yay!");
-        return "index";
+    @GetMapping("")
+    public List<List<Character>> getMap() {
+        return mapService.generateMaze(10, 10);
     }
 }
