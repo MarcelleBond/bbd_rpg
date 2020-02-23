@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" 
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--/*@thymesVar id="message" type="java.lang.String"*/-->
+    <title th:text="${message}">Title</title>
+</head>
+<body>
+    <h1>Welcome to the RPG</h1>
+    <!--/*@thymesVar id="map" type="java.util.List"*/-->
+    <p th:each="row : ${map}" th:text="${row}"></p>
+</body>
+</html>
