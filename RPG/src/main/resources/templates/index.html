@@ -7,11 +7,9 @@
     <!--/*@thymesVar id="message" type="java.lang.String"*/-->
     <title th:text="${message}">Title</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <script type="text/javascript" th:src="@{/webjars/jquery/3.1.1-1/jquery.min.js}"></script>
-<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-<!--    <script type="text/javascript" th:inline="javascript" th:src="@{/WEB-INF/resources/app.js}"></script>-->
+    <script type="text/javascript" th:src="@{webjars/jquery/3.1.1-1/jquery.min.js}"></script>
+    <script th:src="@{webjars/sockjs-client/1.0.2/sockjs.min.js}"></script>
+    <script th:src="@{webjars/stomp-websocket/2.3.3/stomp.min.js}"></script>
 </head>
 <body>
     <button id="connect">Connect</button>
