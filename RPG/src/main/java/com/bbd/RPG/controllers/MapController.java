@@ -19,8 +19,14 @@ public class MapController {
 
     @GetMapping("/test")
     public String test(Model model){
-        model.addAttribute("map", mapService.generateMaze(10, 10));
-        model.addAttribute("message", "This works, yay!");
+        model.addAttribute("map", mapService.generateMaze(50, 10));
+        model.addAttribute("message", "Classic");
+        return "index";
+    }
+    @GetMapping("/rooms")
+    public String rooms(Model model){
+        model.addAttribute("map", mapService.generateDivisionMaze(100, 20));
+        model.addAttribute("message", "Rooms");
         return "index";
     }
 }
