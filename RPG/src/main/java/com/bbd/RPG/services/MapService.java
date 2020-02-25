@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 @Service
 public class MapService {
@@ -140,27 +141,58 @@ public class MapService {
         }
     }
 
+    private int getHolePosition(int low, int high, Position mid, boolean isVert, List<List<Character>> map) {
+        Random rand = new Random();
+        int hole;
+        boolean noNeighbouringWalls = false;
+        do {
+            hole = rand.ints(low + 1, high).findFirst().getAsInt();
+            if (isVert) {
+                noNeighbouringWalls = map.get(hole).get(mid.x - 1) == '0' && map.get(hole).get(mid.x + 1) == '0';
+            } else {
+                noNeighbouringWalls = map.get(mid.y - 1).get(hole) == '0' && map.get(mid.y + 1).get(hole) == '0';
+            }
+        } while (!noNeighbouringWalls);
+        return hole;
+    }
+
+    private Position getWallPosition(Position low, Position high, boolean isVert, List<List<Character>> map) {
+        Position mid = null;
+        if (isVert){
+            mid = new Position((high.x + low.x) / 2, low.y);
+            if (map.get(low.y).get(mid.x) == '0' || map.get(high.y).get(mid.x) == '0'){
+                mid.x += 1;
+            }
+        }
+        else {
+            mid = new Position(low.x, (low.y + high.y) / 2);
+            if (map.get(mid.y).get(low.x) == '0' || map.get(mid.y).get(high.x) == '0')
+                mid.y += 1;
+        }
+        return mid;
+    }
+
     private void divideVertically(List<List<Character>> map, Position low, Position high) {
         Random r = new Random();
-        int hole = r.ints(low.y + 1, high.y).findFirst().getAsInt();
-        Position mid = new Position((high.x + low.x) / 2, low.y);
+        Position mid = getWallPosition(low, high, true, map);
+        int hole = getHolePosition(low.y, high.y, mid, true, map);
         for (int y = low.y + 1; y < high.y; y++) {
             if (y != hole)
                 map.get(y).set(mid.x, '1');
         }
-        divide(map, low, new Position((high.x + low.x) / 2, high.y));
-        divide(map, new Position((high.x + low.x) / 2, low.y), high);
+        divide(map, low, new Position(mid.x, high.y));
+        divide(map, new Position(mid.x, low.y), high);
     }
 
     private void divideHorizontally(List<List<Character>> map, Position low, Position high) {
         Random r = new Random();
-        int hole = r.ints(low.x + 1, high.x).findFirst().getAsInt();
-        Position mid = new Position(low.x, (low.y + high.y) / 2);
-        for (int x = low.x + 1 ; x < high.x; x++) {
+        Position mid = getWallPosition(low, high, false, map);
+        int hole = getHolePosition(low.x, high.x, mid, false, map);
+        for (int x = low.x + 1; x < high.x; x++) {
             if (x != hole)
                 map.get(mid.y).set(x, '1');
         }
-        divide(map, low, new Position(high.x, (low.y + high.y) / 2));
-        divide(map, new Position(low.x, (low.y + high.y) / 2), high);
+        divide(map, low, new Position(high.x, mid.y));
+        divide(map, new Position(low.x, mid.y), high);
     }
 }
