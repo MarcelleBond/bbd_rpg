@@ -12,6 +12,6 @@ public class StatusController {
     @MessageMapping("/status")
     @SendTo("/player/status")
     public Status status(StatusMessage statusMessage) throws InterruptedException {
-        return new Status(String.format("%s, %s, %s", statusMessage.name, statusMessage.status, statusMessage.level));
+        return new Status(String.format("Name: %s, Status: %s, Level: %s", statusMessage.name, statusMessage.status, statusMessage.level));
     }
 }
