@@ -13,9 +13,9 @@
 </head>
 <body>
     <div class="row">
-        <input type="text" name="name" id="name" placeholder="Please enter name before connecting" style="width: 300px; margin-left: 30px">
-        <button style="margin-left: 30px" id="connect">Connect</button>
-        <button id="disconnect">Disconnect</button>
+        <label for="name" style=" margin-left: 30px">Player name: </label><input type="text" name="name" id="name" style="width: 200px;">
+        <button style="margin-left: 30px" id="connect" disabled>Connect</button>
+        <button id="disconnect" disabled>Disconnect</button>
     </div>
     <div class="row">
         <div class="col-2">
@@ -53,10 +53,11 @@
 
 <script>
     let stompClient = null;
-
+    let playerConnected = false;
     function setConnected(connected) {
-        $("#connect").prop('disabled', connected);
-        $("#disconnect").prop('disabled', !connected);
+        playerConnected = connected;
+        $('#connect').prop('disabled', (playerConnected || $('#name').val() === ""));
+        $('#disconnect').prop('disabled', !playerConnected);
         if (!connected)
             $("#statusList").html("Not connected");
         else
@@ -68,7 +69,6 @@
         stompClient = Stomp.over(socket);
         stompClient.connect({}, (frame) => {
             setConnected(true);
-            console.log('Connected: ', frame);
             stompClient.subscribe('/player/active', (message) => {
                 let players = JSON.parse(message.body);
                 showPlayers(players);
@@ -82,20 +82,26 @@
             stompClient.send('/app/leave', {}, $("#name").val());
             stompClient.disconnect();
         setConnected(false);
-        console.log('Disconnected');
     }
     function showPlayers(players) {
         let statusList = $('#statusList');
         statusList.html('');
         players.forEach((player) => {
-            console.log(player);
            statusList.append(`<li>${player}</li>`);
         });
     }
 
     $(() => {
         setConnected(false);
-        $("#connect").click(() => connect());
-        $("#disconnect").click(() => disconnect());
+        let connectButton = $("#connect");
+        let disconnectButton = $("#disconnect");
+        let nameInput = $("#name");
+        nameInput.on('input', () => {
+            connectButton.prop('disabled', (playerConnected || nameInput.val() === ""));
+        });
+        connectButton.prop('disabled', (playerConnected || nameInput.val() === ""));
+        disconnectButton.prop('disabled', !playerConnected);
+        connectButton.click(() => connect());
+        disconnectButton.click(() => disconnect());
     });
 </script>
