@@ -22,11 +22,7 @@
             </ul>
         </div>
         <div class="col-8">
-            <span style="display: inline-block" th:each="row : ${map}" class="tile">
-                <span th:each="col : ${row}" th:class="(${col} == '1') ? 'wall': 'space'">0</span>
-            </span>
-        </div>
-        <div class="col-8">
+            <canvas id="canvas" width="800" height="400"></canvas>
         </div>
     </div>
     <!--/*@thymesVar id="map" type="java.util.List"*/-->
@@ -51,4 +47,5 @@
 <script type="text/javascript" th:src="@{/webjars/jquery/3.1.1-1/jquery.min.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/sockjs-client/1.0.2/sockjs.min.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/stomp-websocket/2.3.3/stomp.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/axios/0.19.2/dist/axios.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/app.js}"></script>

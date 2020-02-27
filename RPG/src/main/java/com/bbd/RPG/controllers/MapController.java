@@ -17,10 +17,8 @@ public class MapController {
         this.mapService = mapService;
     }
 
-    @GetMapping("/test")
-    public String test(Model model){
-        model.addAttribute("map", mapService.generateMaze(40, 15));
-        model.addAttribute("message", "Classic");
+    @GetMapping("")
+    public String test(){
         return "index";
     }
     @GetMapping("/rooms")
