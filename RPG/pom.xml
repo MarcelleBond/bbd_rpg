@@ -20,6 +20,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>axios</artifactId>
+			<version>0.19.2</version>
+		</dependency>
+		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>webjars-locator</artifactId>
 			<version>0.30</version>

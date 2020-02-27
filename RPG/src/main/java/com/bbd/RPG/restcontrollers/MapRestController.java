@@ -19,6 +19,10 @@ public class MapRestController {
 
     @GetMapping("")
     public List<List<Character>> getMap() {
-        return mapService.generateMaze(10, 10);
+        return mapService.generateMaze(40, 20);
+    }
+    @GetMapping("/rooms")
+    public List<List<Character>> getMapWithRooms() {
+        return mapService.generateDivisionMaze(80, 40);
     }
 }
