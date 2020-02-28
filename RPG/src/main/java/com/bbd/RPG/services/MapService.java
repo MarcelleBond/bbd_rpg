@@ -11,6 +11,9 @@ import java.util.stream.IntStream;
 
 @Service
 public class MapService {
+    private final Character empty = '0';
+    private final Character wall = '1';
+    private final Character door = '$';
     private Character[][] getEmptyMazeWithWalls(int width, int height) {
         int mulWidth = width * 2 + 1;
         int mulHeight = height * 2 + 1;
@@ -18,9 +21,9 @@ public class MapService {
         for (int y = 0; y < mulHeight; y++) {
             for (int x = 0; x < mulWidth; x++) {
                 if (y % 2 == 0 || x % 2 == 0)
-                    map[y][x] = '1';
+                    map[y][x] = wall;
                 else
-                    map[y][x] = '0';
+                    map[y][x] = empty;
             }
         }
         return map;
@@ -31,9 +34,9 @@ public class MapService {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (x == 0 || x == width - 1 || y == 0 || y == height - 1)
-                    map[y][x] = '1';
+                    map[y][x] = wall;
                 else
-                    map[y][x] = '0';
+                    map[y][x] = empty;
             }
         }
         return map;
@@ -46,8 +49,8 @@ public class MapService {
         Random rand = new Random();
         Position startPos = new Position(rand.nextInt(width) * 2 + 1, 0);
         Position exitPos = new Position(rand.nextInt(width) * 2 + 1, mulHeight - 1);
-        map[startPos.y][startPos.x] = '$';
-        map[exitPos.y][exitPos.x] = '$';
+        map[startPos.y][startPos.x] = door;
+        map[exitPos.y][exitPos.x] = door;
 
         Vector[] dirs = new Vector[]{new Vector(0, -2), new Vector(0, 2), new Vector(-2, 0), new Vector(2, 0)};
         List<Position> visited = new ArrayList<>();
@@ -75,7 +78,7 @@ public class MapService {
                 Position midPoint = new Position(currPos.x, currPos.y);
                 midPoint.x += Integer.compare(tempPos.x, currPos.x);
                 midPoint.y += Integer.compare(tempPos.y, currPos.y);
-                map[midPoint.y][midPoint.x] = '0';
+                map[midPoint.y][midPoint.x] = empty;
                 currPos = tempPos;
                 visited.add(currPos);
                 stack.add(currPos);
@@ -127,9 +130,9 @@ public class MapService {
         do {
             hole = rand.ints(low + 1, high).findFirst().getAsInt();
             if (isVert) {
-                noNeighbouringWalls = map[hole][mid.x - 1] == '0' && map[hole][mid.x + 1] == '0';
+                noNeighbouringWalls = map[hole][mid.x - 1] == empty && map[hole][mid.x + 1] == empty;
             } else {
-                noNeighbouringWalls = map[mid.y - 1][hole] == '0' && map[mid.y + 1][hole] == '0';
+                noNeighbouringWalls = map[mid.y - 1][hole] == empty && map[mid.y + 1][hole] == empty;
             }
         } while (!noNeighbouringWalls);
         return hole;
@@ -139,13 +142,13 @@ public class MapService {
         Position mid = null;
         if (isVert){
             mid = new Position((high.x + low.x) / 2, low.y);
-            if (map[low.y][mid.x] == '0' || map[high.y][mid.x] == '0'){
+            if (map[low.y][mid.x] == empty || map[high.y][mid.x] == empty){
                 mid.x += 1;
             }
         }
         else {
             mid = new Position(low.x, (low.y + high.y) / 2);
-            if (map[mid.y][low.x] == '0' || map[mid.y][high.x] == '0')
+            if (map[mid.y][low.x] == empty || map[mid.y][high.x] == empty)
                 mid.y += 1;
         }
         return mid;
@@ -157,7 +160,7 @@ public class MapService {
         int hole = getHolePosition(low.y, high.y, mid, true, map);
         for (int y = low.y + 1; y < high.y; y++) {
             if (y != hole)
-                map[y][mid.x] = '1';
+                map[y][mid.x] = wall;
         }
         divide(map, low, new Position(mid.x, high.y));
         divide(map, new Position(mid.x, low.y), high);
@@ -169,7 +172,7 @@ public class MapService {
         int hole = getHolePosition(low.x, high.x, mid, false, map);
         for (int x = low.x + 1; x < high.x; x++) {
             if (x != hole)
-                map[mid.y][x] ='1';
+                map[mid.y][x] =wall;
         }
         divide(map, low, new Position(high.x, mid.y));
         divide(map, new Position(low.x, mid.y), high);
