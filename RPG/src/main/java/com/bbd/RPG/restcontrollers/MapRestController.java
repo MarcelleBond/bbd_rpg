@@ -18,11 +18,11 @@ public class MapRestController {
     }
 
     @GetMapping("")
-    public List<List<Character>> getMap() {
+    public Character[][] getMap() {
         return mapService.generateMaze(40, 20);
     }
     @GetMapping("/rooms")
-    public List<List<Character>> getMapWithRooms() {
+    public Character[][] getMapWithRooms() {
         return mapService.generateDivisionMaze(80, 40);
     }
 }
