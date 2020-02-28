@@ -14,6 +14,7 @@ public class MapService {
     private final Character empty = '0';
     private final Character wall = '1';
     private final Character door = '$';
+    private final Random rand = new Random();
     private Character[][] getEmptyMazeWithWalls(int width, int height) {
         int mulWidth = width * 2 + 1;
         int mulHeight = height * 2 + 1;
@@ -46,7 +47,6 @@ public class MapService {
         int mulWidth = width * 2 + 1;
         int mulHeight = height * 2 + 1;
         Character[][] map = getEmptyMazeWithWalls(width, height);
-        Random rand = new Random();
         Position startPos = new Position(rand.nextInt(width) * 2 + 1, 0);
         Position exitPos = new Position(rand.nextInt(width) * 2 + 1, mulHeight - 1);
         map[startPos.y][startPos.x] = door;
@@ -115,7 +115,6 @@ public class MapService {
         else if (xDiff <= 5 && yDiff <= 5)
             return;
         else {
-            Random rand = new Random();
             if (rand.nextInt(2) == 1)
                 divideVertically(map, low, high);
             else
@@ -124,7 +123,6 @@ public class MapService {
     }
 
     private int getHolePosition(int low, int high, Position mid, boolean isVert, Character[][] map) {
-        Random rand = new Random();
         int hole;
         boolean noNeighbouringWalls = false;
         do {
@@ -155,7 +153,6 @@ public class MapService {
     }
 
     private void divideVertically(Character[][] map, Position low, Position high) {
-        Random r = new Random();
         Position mid = getWallPosition(low, high, true, map);
         int hole = getHolePosition(low.y, high.y, mid, true, map);
         for (int y = low.y + 1; y < high.y; y++) {
@@ -167,7 +164,6 @@ public class MapService {
     }
 
     private void divideHorizontally(Character[][] map, Position low, Position high) {
-        Random r = new Random();
         Position mid = getWallPosition(low, high, false, map);
         int hole = getHolePosition(low.x, high.x, mid, false, map);
         for (int x = low.x + 1; x < high.x; x++) {
