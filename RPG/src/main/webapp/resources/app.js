@@ -72,14 +72,22 @@ function drawMap(){
                 if (map[y][x] == '0'){
                     tile = {x: 0, y: 5};
                 }
+                if (map[y][x] == '$'){
+                    tile = {x: 3, y: 1};
+                }
                 ctx.drawImage(tileset, 16*tile.x, 16*tile.y, 16, 16, 16*x, 16*y, 16, 16);
+                //draw any overlaying elements (player, monsters, items, etc.)
+                if (y == 9 && x == 9){
+                    tile = {x: 0, y: 8};
+                }
+                    ctx.drawImage(tileset, 16*tile.x, 16*tile.y, 16, 16, 16*x, 16*y, 16, 16);
             }
         }
     };
 }
 
 $(() => {
-    getMap("rooms");
+    getMap("maze");
     setConnected(false);
     let connectButton = $("#connect");
     let disconnectButton = $("#disconnect");
