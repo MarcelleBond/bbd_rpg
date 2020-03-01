@@ -1,7 +1,7 @@
 package com.bbd.RPG.controllers;
 
-import com.bbd.RPG.models.stompmessages.Status;
-import com.bbd.RPG.models.stompmessages.StatusMessage;
+import com.bbd.RPG.models.stompmessages.StatusOut;
+import com.bbd.RPG.models.stompmessages.StatusIn;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -15,8 +15,8 @@ public class StatusController {
 
     @MessageMapping("/status")
     @SendTo("/player/status")
-    public Status status(StatusMessage statusMessage) throws InterruptedException {
-        return new Status(String.format("Name: %s, Status: %s, Level: %s", statusMessage.name, statusMessage.status, statusMessage.level));
+    public String status(StatusIn statusIn) throws InterruptedException {
+        return String.format("Name: %s, Status: %s, Level: %s", statusIn.name, statusIn.status, statusIn.level);
     }
 
     @MessageMapping("/join")

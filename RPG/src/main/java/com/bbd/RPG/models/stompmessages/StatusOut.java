@@ -1,13 +1,13 @@
 package com.bbd.RPG.models.stompmessages;
 
-public class Status {
+public class StatusOut {
     public String content;
 
     public String getContent() {
         return content;
     }
 
-    public Status(String content) {
+    public StatusOut(String content) {
         this.content = content;
     }
 
