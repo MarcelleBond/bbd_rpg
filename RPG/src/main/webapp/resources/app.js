@@ -60,17 +60,22 @@ function drawMap(){
     console.log(map);
     let canvas = document.getElementById('canvas');
     let ctx = canvas.getContext('2d');
-    for (let y = 0; y < map.length; y++){
-        for (let x = 0; x < map[0].length; x++){
-            let pos = {x: 10*x, y: 10*y};
-            ctx.moveTo(10*x, 10*y);
-            if (map[y][x] === '1')
-                ctx.fillStyle = 'black';
-            else
-                ctx.fillStyle = 'green';
-            ctx.fillRect(pos.x, pos.y, 10, 10)
+    let tileset = new Image();
+    tileset.src = '/resources/tiles.png';
+    tileset.onload = () => {
+        for (let y = 0; y < map.length; y++){
+            for (let x = 0; x < map[0].length; x++){
+                let tile = {x: 0, y: 0};
+                if (map[y][x] == '1'){
+                    tile = {x: 7, y: 5};
+                }
+                if (map[y][x] == '0'){
+                    tile = {x: 0, y: 5};
+                }
+                ctx.drawImage(tileset, 16*tile.x, 16*tile.y, 16, 16, 16*x, 16*y, 16, 16);
+            }
         }
-    }
+    };
 }
 
 $(() => {
