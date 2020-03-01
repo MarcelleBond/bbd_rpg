@@ -1,11 +1,11 @@
 package com.bbd.RPG.models.stompmessages;
 
-public class StatusMessage {
+public class StatusIn {
     public String name;
     public String level;
     public String status;
 
-    public StatusMessage(String name, String level, String status) {
+    public StatusIn(String name, String level, String status) {
         this.name = name;
         this.level = level;
         this.status = status;
