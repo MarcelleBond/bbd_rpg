@@ -14,6 +14,7 @@ public class MapService {
     private final Character empty = '0';
     private final Character wall = '1';
     private final Character door = '$';
+    private final Character player = '@';
     private final Random rand = new Random();
     private Character[][] getEmptyMazeWithWalls(int width, int height) {
         int mulWidth = width * 2 + 1;
@@ -67,7 +68,6 @@ public class MapService {
                     neighbours.add(newPos);
                 }
             }
-            System.out.println(neighbours);
             if (neighbours.isEmpty()) {
                 if (stack.isEmpty()) {
                     return map;
@@ -101,9 +101,6 @@ public class MapService {
     }
 
     public void divide(Character[][] map, Position low, Position high) {
-        System.out.println(low);
-        System.out.println(high);
-        System.out.println("==========");
         int yDiff = high.y - low.y;
         int xDiff = high.x - low.x;
         if (yDiff <= 4 || xDiff <= 4 || yDiff * xDiff < 150)
@@ -172,5 +169,14 @@ public class MapService {
         }
         divide(map, low, new Position(high.x, mid.y));
         divide(map, new Position(low.x, mid.y), high);
+    }
+
+    public Position getMazeStartingPosition(Character[][] map) {
+        for (int x = 0; x < map[0].length; x++){
+            if (map[0][x] == door){
+                return new Position(x, 1);
+            }
+        }
+        return new Position(-1, -1);
     }
 }

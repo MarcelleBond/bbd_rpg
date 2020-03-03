@@ -19,7 +19,8 @@ public class MapRestController {
 
     @GetMapping("")
     public Character[][] getMap() {
-        return mapService.generateMaze(40, 20);
+        Character[][] map = mapService.generateMaze(40, 20);
+        return map;
     }
     @GetMapping("/rooms")
     public Character[][] getMapWithRooms() {

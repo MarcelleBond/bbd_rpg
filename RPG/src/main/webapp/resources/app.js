@@ -1,6 +1,11 @@
 let stompClient = null;
 let playerConnected = false;
 let map;
+let player = {name: null, pos: null};
+let tileset = new Image();
+tileset.src = '/resources/tiles.png';
+let canvas = document.getElementById('canvas');
+    let ctx = canvas.getContext('2d');
 function setConnected(connected) {
     playerConnected = connected;
     $('#connect').prop('disabled', (playerConnected || $('#name').val() === ""));
@@ -16,12 +21,21 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.debug = null;
     stompClient.connect({}, (frame) => {
+        player.name = $("#name").val();
         setConnected(true);
         stompClient.subscribe('/player/active', (message) => {
             let players = JSON.parse(message.body);
             showPlayers(players);
         });
-        stompClient.send('/app/join', {}, $("#name").val());
+        stompClient.subscribe(`/map/initialMap/${player.name}`, (message) => {
+            message = JSON.parse(message.body);
+            map = message.map;
+            player.pos = message.player;
+            drawMap();
+            drawPlayer();
+        });
+        stompClient.send('/app/join', {}, player.name);
+        stompClient.send(`/app/initializeMap/${player.name}`, {}, '{"x": 40, "y": 20}');
     });
 }
 
@@ -38,56 +52,28 @@ function showPlayers(players) {
         statusList.append(`<li>${player}</li>`);
     });
 }
-
-function getMap(type){
-    let requestPromise;
-    switch (type) {
-        case "rooms":
-            requestPromise = axios.get('http://localhost:8080/api/map/rooms');
-            break;
-        case "maze":
-            requestPromise = axios.get('http://localhost:8080/api/map');
-    }
-    requestPromise
-        .then((result) => {
-            console.log(result);
-            map = result.data;
-            drawMap();
-        });
+function drawPlayer() {
+    ctx.drawImage(tileset, 16*0, 16*19, 16, 16, 16*player.pos.x, 16*player.pos.y, 16, 16);
 }
-
 function drawMap(){
-    console.log(map);
-    let canvas = document.getElementById('canvas');
-    let ctx = canvas.getContext('2d');
-    let tileset = new Image();
-    tileset.src = '/resources/tiles.png';
-    tileset.onload = () => {
-        for (let y = 0; y < map.length; y++){
-            for (let x = 0; x < map[0].length; x++){
-                let tile = {x: 0, y: 0};
-                if (map[y][x] == '1'){
-                    tile = {x: 7, y: 5};
-                }
-                if (map[y][x] == '0'){
-                    tile = {x: 0, y: 5};
-                }
-                if (map[y][x] == '$'){
-                    tile = {x: 3, y: 1};
-                }
-                ctx.drawImage(tileset, 16*tile.x, 16*tile.y, 16, 16, 16*x, 16*y, 16, 16);
-                //draw any overlaying elements (player, monsters, items, etc.)
-                if (y == 9 && x == 9){
-                    tile = {x: 0, y: 8};
-                }
-                    ctx.drawImage(tileset, 16*tile.x, 16*tile.y, 16, 16, 16*x, 16*y, 16, 16);
+    for (let y = 0; y < map.length; y++){
+        for (let x = 0; x < map[0].length; x++){
+            let tile = {x: 0, y: 0};
+            if (map[y][x] == '1'){
+                tile = {x: 7, y: 5};
             }
+            if (map[y][x] == '0'){
+                tile = {x: 0, y: 5};
+            }
+            if (map[y][x] == '$'){
+                tile = {x: 3, y: 1};
+            }
+            ctx.drawImage(tileset, 16*tile.x, 16*tile.y, 16, 16, 16*x, 16*y, 16, 16);
         }
-    };
+    }
 }
 
 $(() => {
-    getMap("maze");
     setConnected(false);
     let connectButton = $("#connect");
     let disconnectButton = $("#disconnect");
