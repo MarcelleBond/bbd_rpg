@@ -53,7 +53,7 @@ function showPlayers(players) {
     });
 }
 function drawPlayer() {
-    ctx.drawImage(tileset, 16*0, 16*19, 16, 16, 16*player.pos.x, 16*player.pos.y, 16, 16);
+    ctx.drawImage(tileset, 16*1, 16*21, 16, 16, 16*player.pos.x, 16*player.pos.y, 16, 16);
 }
 function drawMap(){
     for (let y = 0; y < map.length; y++){
