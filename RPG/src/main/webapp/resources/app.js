@@ -33,7 +33,21 @@ function connect() {
             player.pos = message.player;
             rerender();
             $("body").keypress((e) => {
+                let oldPos = {x: player.pos.x, y: player.pos.y};
                 console.log(e.originalEvent.key);
+                if (e.originalEvent.key === 'w')
+                    player.pos.y--;
+                if (e.originalEvent.key === 's')
+                    player.pos.y++;
+                if (e.originalEvent.key === 'a')
+                    player.pos.x--;
+                if (e.originalEvent.key === 'd')
+                    player.pos.x++;
+                if (map[player.pos.y][player.pos.x] == '0'){
+                    rerender();
+                } else {
+                    player.pos = oldPos;
+                }
             });
         });
         stompClient.send('/app/join', {}, player.name);
