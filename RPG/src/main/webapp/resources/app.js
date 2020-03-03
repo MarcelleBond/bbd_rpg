@@ -31,8 +31,10 @@ function connect() {
             message = JSON.parse(message.body);
             map = message.map;
             player.pos = message.player;
-            drawMap();
-            drawPlayer();
+            rerender();
+            $("body").keypress((e) => {
+                console.log(e.originalEvent.key);
+            });
         });
         stompClient.send('/app/join', {}, player.name);
         stompClient.send(`/app/initializeMap/${player.name}`, {}, '{"x": 40, "y": 20}');
@@ -43,6 +45,7 @@ function disconnect() {
     if (stompClient !== null)
         stompClient.send('/app/leave', {}, $("#name").val());
     stompClient.disconnect();
+    $("body").unbind("keypress");
     setConnected(false);
 }
 function showPlayers(players) {
@@ -71,6 +74,11 @@ function drawMap(){
             ctx.drawImage(tileset, 16*tile.x, 16*tile.y, 16, 16, 16*x, 16*y, 16, 16);
         }
     }
+}
+
+function rerender(){
+    drawMap();
+    drawPlayer();
 }
 
 $(() => {
