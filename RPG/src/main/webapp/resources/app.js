@@ -1,9 +1,27 @@
+let tileset = 'retro';
+let sz = 16;
+let tiles = {
+    player: {},
+    space: {},
+    wall: {},
+    entrance: {},
+    exit: {}
+}
 let stompClient = null;
 let playerConnected = false;
 let map;
 let player = {name: null, pos: null};
-let tileset = new Image();
-tileset.src = '/resources/tiles.png';
+let tilemap = new Image();
+switch(tileset){
+    default:
+        tilemap.src = '/resources/tiles.png';
+        tiles.player = {x: 2, y: 19};
+        tiles.space = {x: 0, y: 5};
+        tiles.wall = {x: 7, y: 5};
+        tiles.entrance = {x: 3, y: 1};
+        tiles.exit = {x: 3, y: 1};
+        sz = 16;
+}
 let canvas = document.getElementById('canvas');
     let ctx = canvas.getContext('2d');
 function setConnected(connected) {
@@ -32,26 +50,28 @@ function connect() {
             map = message.map;
             player.pos = message.player;
             rerender();
-            $("body").keypress((e) => {
-                let oldPos = {x: player.pos.x, y: player.pos.y};
+            let canvasElem = $("canvas");
+            canvasElem.attr('tabindex', '0');
+            canvasElem.focus();
+            $("canvas").unbind('keypress');
+            $("canvas").keypress((e) => {
                 console.log(e.originalEvent.key);
-                if (e.originalEvent.key === 'w')
-                    player.pos.y--;
-                if (e.originalEvent.key === 's')
-                    player.pos.y++;
-                if (e.originalEvent.key === 'a')
-                    player.pos.x--;
-                if (e.originalEvent.key === 'd')
-                    player.pos.x++;
-                if (map[player.pos.y][player.pos.x] == '0'){
-                    rerender();
-                } else {
-                    player.pos = oldPos;
+                let oldPos = {x: player.pos.x, y: player.pos.y};
+                switch (e.originalEvent.key){
+                    case 'w': player.pos.y--; break;
+                    case 's': player.pos.y++; break;
+                    case 'a': player.pos.x--; break;
+                    case 'd': player.pos.x++; break;
+                }
+                switch (map[player.pos.y][player.pos.x]){
+                    case '0': rerender(); break;
+                    case '$': stompClient.send(`/app/initializeMap/${player.name}`, {}, '{"x": 10, "y": 10}'); break;
+                    default: player.pos = oldPos;
                 }
             });
         });
         stompClient.send('/app/join', {}, player.name);
-        stompClient.send(`/app/initializeMap/${player.name}`, {}, '{"x": 40, "y": 20}');
+        stompClient.send(`/app/initializeMap/${player.name}`, {}, '{"x": 10, "y": 10}');
     });
 }
 
@@ -59,7 +79,7 @@ function disconnect() {
     if (stompClient !== null)
         stompClient.send('/app/leave', {}, $("#name").val());
     stompClient.disconnect();
-    $("body").unbind("keypress");
+    $("canvas").unbind("keypress");
     setConnected(false);
 }
 function showPlayers(players) {
@@ -70,22 +90,22 @@ function showPlayers(players) {
     });
 }
 function drawPlayer() {
-    ctx.drawImage(tileset, 16*1, 16*21, 16, 16, 16*player.pos.x, 16*player.pos.y, 16, 16);
+    ctx.drawImage(tilemap, sz*tiles.player.x, sz*tiles.player.y, sz, sz, sz*player.pos.x, sz*player.pos.y, sz, sz);
 }
 function drawMap(){
     for (let y = 0; y < map.length; y++){
         for (let x = 0; x < map[0].length; x++){
             let tile = {x: 0, y: 0};
             if (map[y][x] == '1'){
-                tile = {x: 7, y: 5};
+                tile = tiles.wall;
             }
             if (map[y][x] == '0'){
-                tile = {x: 0, y: 5};
+                tile = tiles.space;
             }
             if (map[y][x] == '$'){
-                tile = {x: 3, y: 1};
+                tile = tiles.entrance;
             }
-            ctx.drawImage(tileset, 16*tile.x, 16*tile.y, 16, 16, 16*x, 16*y, 16, 16);
+            ctx.drawImage(tilemap, sz*tile.x, sz*tile.y, sz, sz, sz*x, sz*y, sz, sz);
         }
     }
 }
