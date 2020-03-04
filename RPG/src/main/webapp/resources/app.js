@@ -12,13 +12,16 @@ let playerConnected = false;
 let map;
 let mapSize = {x: 5, y: 5};
 let player = {name: null, pos: null};
-let tilemap;
+let tilemap = new Image();
+tilemap.onload = () => {
+    if (map) rerender();
+};
 
 let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
 
 function loadTileset(tileset){
-    tilemap = new Image();
+    ctx.clearRect(0, 0, mapSize.x*sz*2 + sz, mapSize.y*sz*2 + sz)
     switch(tileset){
         case 'retro':
             tilemap.src = '/resources/tiles.png';
@@ -27,6 +30,15 @@ function loadTileset(tileset){
             tiles.wall = {x: 7, y: 5};
             tiles.entrance = {x: 3, y: 1};
             tiles.exit = {x: 3, y: 1};
+            sz = 16;
+            break;
+        case 'dungeon':
+            tilemap.src = '/resources/dungeon.png';
+            tiles.player = {x: 8, y: 1};
+            tiles.space = {x: 1, y: 4};
+            tiles.wall = {x: 6, y: 9};
+            tiles.entrance = {x: 3, y: 6};
+            tiles.exit = {x: 3, y: 6};
             sz = 16;
             break;
         default:
@@ -73,7 +85,6 @@ function connect() {
             canvasElem.focus();
             $("canvas").unbind('keypress');
             $("canvas").keypress((e) => {
-                console.log(e.originalEvent.key);
                 let oldPos = {x: player.pos.x, y: player.pos.y};
                 switch (e.originalEvent.key){
                     case 'w': player.pos.y--; break;
