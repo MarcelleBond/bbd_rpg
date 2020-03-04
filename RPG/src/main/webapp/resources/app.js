@@ -10,6 +10,7 @@ let tiles = {
 let stompClient = null;
 let playerConnected = false;
 let map;
+let mapSize = {x: 5, y: 5};
 let player = {name: null, pos: null};
 let tilemap = new Image();
 switch(tileset){
@@ -46,6 +47,8 @@ function connect() {
             showPlayers(players);
         });
         stompClient.subscribe(`/map/initialMap/${player.name}`, (message) => {
+            ctx.canvas.width = mapSize.x * sz * 2 + sz;
+            ctx.canvas.height = mapSize.y * sz * 2 + sz;
             message = JSON.parse(message.body);
             map = message.map;
             player.pos = message.player;
@@ -62,16 +65,20 @@ function connect() {
                     case 's': player.pos.y++; break;
                     case 'a': player.pos.x--; break;
                     case 'd': player.pos.x++; break;
+                    case 'q': player.pos.y--; player.pos.x--; break;
+                    case 'z': player.pos.y++; player.pos.x--; break;
+                    case 'e': player.pos.y--; player.pos.x++; break;
+                    case 'c': player.pos.y++; player.pos.x++; break;
                 }
                 switch (map[player.pos.y][player.pos.x]){
                     case '0': rerender(); break;
-                    case '$': stompClient.send(`/app/initializeMap/${player.name}`, {}, '{"x": 10, "y": 10}'); break;
+                    case '$': stompClient.send(`/app/initializeMap/${player.name}`, {}, JSON.stringify(mapSize)); break;
                     default: player.pos = oldPos;
                 }
             });
         });
         stompClient.send('/app/join', {}, player.name);
-        stompClient.send(`/app/initializeMap/${player.name}`, {}, '{"x": 10, "y": 10}');
+        stompClient.send(`/app/initializeMap/${player.name}`, {}, JSON.stringify(mapSize));
     });
 }
 
