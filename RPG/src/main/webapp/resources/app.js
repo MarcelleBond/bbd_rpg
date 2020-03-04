@@ -14,13 +14,22 @@ let mapSize = {x: 5, y: 5};
 let player = {name: null, pos: null};
 let tilemap = new Image();
 switch(tileset){
-    default:
+    case 'retro':
         tilemap.src = '/resources/tiles.png';
         tiles.player = {x: 2, y: 19};
         tiles.space = {x: 0, y: 5};
         tiles.wall = {x: 7, y: 5};
         tiles.entrance = {x: 3, y: 1};
         tiles.exit = {x: 3, y: 1};
+        sz = 16;
+        break;
+    default:
+        tilemap.src = '/resources/tiles.png';
+        tiles.player = {x: 0, y: 0};
+        tiles.space = {x: 0, y: 0};
+        tiles.wall = {x: 0, y: 0};
+        tiles.entrance = {x: 0, y: 0};
+        tiles.exit = {x: 0, y: 0};
         sz = 16;
 }
 let canvas = document.getElementById('canvas');
