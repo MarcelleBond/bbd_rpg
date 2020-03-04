@@ -10,9 +10,13 @@
 </head>
 <body>
     <div class="row">
-        <label for="name" style=" margin-left: 30px">Player name: </label><input type="text" name="name" id="name" style="width: 200px;">
+        <label for="name" style=" margin-left: 30px">Player name: </label><input type="text" name="name" id="name">
         <button style="margin-left: 30px" id="connect" disabled>Connect</button>
         <button id="disconnect" disabled>Disconnect</button>
+        <select type="text" name="tileset" id="tileset" value="retro">
+            <option value="retro">retro</option>
+            <option value="dungeon">dungeon</option>
+        </select>
     </div>
     <div class="row">
         <div class="col-2">

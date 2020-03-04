@@ -12,28 +12,34 @@ let playerConnected = false;
 let map;
 let mapSize = {x: 5, y: 5};
 let player = {name: null, pos: null};
-let tilemap = new Image();
-switch(tileset){
-    case 'retro':
-        tilemap.src = '/resources/tiles.png';
-        tiles.player = {x: 2, y: 19};
-        tiles.space = {x: 0, y: 5};
-        tiles.wall = {x: 7, y: 5};
-        tiles.entrance = {x: 3, y: 1};
-        tiles.exit = {x: 3, y: 1};
-        sz = 16;
-        break;
-    default:
-        tilemap.src = '/resources/tiles.png';
-        tiles.player = {x: 0, y: 0};
-        tiles.space = {x: 0, y: 0};
-        tiles.wall = {x: 0, y: 0};
-        tiles.entrance = {x: 0, y: 0};
-        tiles.exit = {x: 0, y: 0};
-        sz = 16;
-}
+let tilemap;
+
 let canvas = document.getElementById('canvas');
-    let ctx = canvas.getContext('2d');
+let ctx = canvas.getContext('2d');
+
+function loadTileset(tileset){
+    tilemap = new Image();
+    switch(tileset){
+        case 'retro':
+            tilemap.src = '/resources/tiles.png';
+            tiles.player = {x: 2, y: 19};
+            tiles.space = {x: 0, y: 5};
+            tiles.wall = {x: 7, y: 5};
+            tiles.entrance = {x: 3, y: 1};
+            tiles.exit = {x: 3, y: 1};
+            sz = 16;
+            break;
+        default:
+            tilemap.src = '/resources/tiles.png';
+            tiles.player = {x: 0, y: 0};
+            tiles.space = {x: 0, y: 0};
+            tiles.wall = {x: 0, y: 0};
+            tiles.entrance = {x: 0, y: 0};
+            tiles.exit = {x: 0, y: 0};
+            sz = 16;
+    }
+}
+
 function setConnected(connected) {
     playerConnected = connected;
     $('#connect').prop('disabled', (playerConnected || $('#name').val() === ""));
@@ -132,12 +138,18 @@ function rerender(){
 }
 
 $(() => {
+    loadTileset(tileset);
     setConnected(false);
     let connectButton = $("#connect");
     let disconnectButton = $("#disconnect");
     let nameInput = $("#name");
     nameInput.on('input', () => {
         connectButton.prop('disabled', (playerConnected || nameInput.val() === ""));
+    });
+    $("#tileset").on('input', () => {
+        tileset = $("#tileset").val();
+        loadTileset(tileset);
+        rerender();
     });
     connectButton.prop('disabled', (playerConnected || nameInput.val() === ""));
     disconnectButton.prop('disabled', !playerConnected);
