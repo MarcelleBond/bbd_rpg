@@ -1,0 +1,12 @@
+spring:
+  # Templates reloading during development
+  thymeleaf:
+    prefix: file:src/main/webapp/WEB-INF/templates/
+#    prefix: RPG/src/main/webapp/WEB-INF/templates/index.html file:src/main/resources/templates/
+    cache: false
+
+  # Static resources reloading during development
+  resources:
+#    static-locations: file:src/main/resources/static/
+    static-locations: file:src/main/webapp/WEB-INF/templates/
+    cache-period: 0
