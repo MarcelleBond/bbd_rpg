@@ -1,5 +1,7 @@
 package com.bbd.RPG.controllers;
 
+import com.bbd.RPG.RpgApplication;
+import com.bbd.RPG.models.Player;
 import com.bbd.RPG.models.Position;
 import com.bbd.RPG.models.stompmessages.InitializeMapIn;
 import com.bbd.RPG.services.MapService;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -35,6 +36,10 @@ public class MapController {
         Map result = new HashMap();
         Character[][] map = mapService.generateMaze(size.x, size.y);
         Position playerPos = mapService.getMazeStartingPosition(map);
+
+        RpgApplication.game.map = map;
+        RpgApplication.game.player = new Player(playerPos);
+
         result.put("map", map);
         result.put("player", playerPos);
         return result;

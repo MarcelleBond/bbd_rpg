@@ -19,6 +19,7 @@ public class MapService {
     private Character[][] getEmptyMazeWithWalls(int width, int height) {
         int mulWidth = width * 2 + 1;
         int mulHeight = height * 2 + 1;
+
         Character[][] map = new Character[mulHeight][mulWidth];
         for (int y = 0; y < mulHeight; y++) {
             for (int x = 0; x < mulWidth; x++) {
@@ -47,6 +48,7 @@ public class MapService {
     public Character[][] generateMaze(int width, int height) {
         int mulWidth = width * 2 + 1;
         int mulHeight = height * 2 + 1;
+
         Character[][] map = getEmptyMazeWithWalls(width, height);
         Position startPos = new Position(rand.nextInt(width) * 2 + 1, 0);
         Position exitPos = new Position(rand.nextInt(width) * 2 + 1, mulHeight - 1);
