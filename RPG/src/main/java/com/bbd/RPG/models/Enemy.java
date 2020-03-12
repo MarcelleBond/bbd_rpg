@@ -9,6 +9,8 @@ public class Enemy extends GameCharacter{
     int maxHitPoints;
     int dropExperiencePoints;
 
+    public Enemy() {super();}
+
     public Enemy(Position position, int experiencePoints){
         this.position = position;
         this.experiencePoints = experiencePoints;

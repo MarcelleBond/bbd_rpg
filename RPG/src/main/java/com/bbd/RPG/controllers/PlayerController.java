@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 import java.util.*;
 
 @Controller
-public class StatusController {
+public class PlayerController {
     private Map<String, Player> activePlayers = new HashMap<>();
 
     @Autowired
@@ -39,7 +39,6 @@ public class StatusController {
     @MessageMapping("/player/move/{player}")
     @SendTo("/player/active")
     public Map<String, Player> updatePosition(@DestinationVariable String player, Position newPosition){
-        System.out.println(player);
         activePlayers.get(player).position = newPosition;
         return activePlayers;
     }
@@ -47,11 +46,9 @@ public class StatusController {
     @MessageMapping("/join/{player}")
     @SendTo("/player/active")
     public Map<String, Player> playerJoined(@DestinationVariable String player){
-
         Player newPlayer = new Player(player, null, null);
-//        playerService.generateNewMap(newPlayer, 10, 10);
+        playerService.generateNewMap(newPlayer, 10, 10);
         activePlayers.put(player, newPlayer);
-        System.out.println(activePlayers);
         return activePlayers;
     }
 
@@ -64,8 +61,15 @@ public class StatusController {
 
     @MessageMapping("/player/levelup/{player}")
     @SendTo("/player/active")
-    public Map<String, Player> leveupPlayer(@DestinationVariable String player){
+    public Map<String, Player> levelupPlayer(@DestinationVariable String player){
         activePlayers.get(player).level++;
+        return activePlayers;
+    }
+
+    @MessageMapping("/player/update/{playerName}")
+    @SendTo("/player/active")
+    public Map<String, Player> updatePlayer(@DestinationVariable String playerName, Player player){
+        activePlayers.put(playerName, player);
         return activePlayers;
     }
 

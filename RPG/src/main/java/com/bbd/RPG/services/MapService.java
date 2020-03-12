@@ -61,7 +61,6 @@ public class MapService {
         // find avaliable space and add enemies to the map
         int enemyAmount = (avaliableSpaces > 10) ? new Random().nextInt((int)(Math.ceil(avaliableSpaces / 10) + 1)) : 1; //new Random().nextInt((int)(Math.ceil(map.length / 3) + 1)) ;
         avaliableSpaces -= enemyAmount;
-        System.out.println(enemyAmount);
         while (enemyAmount >= 0) {
             int xPosition = new Random().nextInt(map[0].length) ;
             int yPosition = new Random().nextInt(map.length) ;

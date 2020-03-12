@@ -5,6 +5,8 @@ public class Item {
     public Position position;
     public int hitPoints;
 
+    public Item() {super();}
+
     public Item(Position position, int hitPoints){
         this.position = position;
         this.hitPoints = hitPoints;

@@ -20,6 +20,65 @@ public class Player extends GameCharacter{
         this.experiencePoints = 0;
     }
 
+    public Player(int maxHitPoints, Position position, int health, String name, int level, GameMap map) {
+        this.maxHitPoints = maxHitPoints;
+        this.position = position;
+        this.health = health;
+        this.name = name;
+        this.level = level;
+        this.map = map;
+    }
+
+    public int getMaxHitPoints() {
+        return maxHitPoints;
+    }
+
+    public void setMaxHitPoints(int maxHitPoints) {
+        this.maxHitPoints = maxHitPoints;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public GameMap getMap() {
+        return map;
+    }
+
+    public void setMap(GameMap map) {
+        this.map = map;
+    }
+
+    public Player(){ super();}
+
     public Player(Position position, int hitPoints, int experiencePoints){
 //        this.name = name;
 //        this.level = level;
