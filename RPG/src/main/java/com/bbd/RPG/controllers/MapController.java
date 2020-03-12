@@ -1,10 +1,12 @@
 package com.bbd.RPG.controllers;
 
-import com.bbd.RPG.models.Position;
+import com.bbd.RPG.RpgApplication;
+import com.bbd.RPG.models.*;
 import com.bbd.RPG.models.stompmessages.InitializeMapIn;
 import com.bbd.RPG.services.MapService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONObject;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -14,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @Controller
 @RequestMapping("")
@@ -29,16 +31,7 @@ public class MapController {
     public String test(){
         return "index";
     }
-    @MessageMapping("/initializeMap/{playerName}")
-    @SendTo("/map/initialMap/{playerName}")
-    public Map initializeMap(InitializeMapIn size){
-        Map result = new HashMap();
-        Character[][] map = mapService.generateMaze(size.x, size.y);
-        Position playerPos = mapService.getMazeStartingPosition(map);
-        result.put("map", map);
-        result.put("player", playerPos);
-        return result;
-    }
+
 
     @GetMapping("/rooms")
     public String rooms(Model model){

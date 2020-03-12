@@ -1,18 +1,34 @@
 package com.bbd.RPG.controllers;
 
-import com.bbd.RPG.models.stompmessages.StatusOut;
+import com.bbd.RPG.models.*;
+import com.bbd.RPG.models.stompmessages.InitializeMapIn;
 import com.bbd.RPG.models.stompmessages.StatusIn;
+import com.bbd.RPG.services.MapService;
+import com.bbd.RPG.services.PlayerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class StatusController {
-    private Set<String> activePlayers = new HashSet<>();
+    private Map<String, Player> activePlayers = new HashMap<>();
+
+    @Autowired
+    MapService mapService;
+
+    @Autowired
+    PlayerService playerService;
+
+    @MessageMapping("/initializeMap/{playerName}")
+    @SendTo("/map/initialMap/{playerName}")
+    public Player initializeMap(@DestinationVariable String playerName, InitializeMapIn size){
+        playerService.generateNewMap(activePlayers.get(playerName), size.x, size.y);
+        return activePlayers.get(playerName);
+    }
 
     @MessageMapping("/status")
     @SendTo("/player/status")
@@ -20,18 +36,38 @@ public class StatusController {
         return String.format("Name: %s, Status: %s, Level: %s", statusIn.name, statusIn.status, statusIn.level);
     }
 
+    @MessageMapping("/player/move/{player}")
+    @SendTo("/player/active")
+    public Map<String, Player> updatePosition(@DestinationVariable String player, Position newPosition){
+        System.out.println(player);
+        activePlayers.get(player).position = newPosition;
+        return activePlayers;
+    }
+
     @MessageMapping("/join/{player}")
     @SendTo("/player/active")
-    public Set<String> playerJoined(@DestinationVariable String player){
-        activePlayers.add(player);
+    public Map<String, Player> playerJoined(@DestinationVariable String player){
+
+        Player newPlayer = new Player(player, null, null);
+//        playerService.generateNewMap(newPlayer, 10, 10);
+        activePlayers.put(player, newPlayer);
+        System.out.println(activePlayers);
         return activePlayers;
     }
 
     @MessageMapping("/leave/{player}")
     @SendTo("/player/active")
-    public Set<String> playerLeft(@DestinationVariable String player){
+    public Map<String, Player> playerLeft(@DestinationVariable String player){
         activePlayers.remove(player);
         return activePlayers;
     }
+
+    @MessageMapping("/player/levelup/{player}")
+    @SendTo("/player/active")
+    public Map<String, Player> leveupPlayer(@DestinationVariable String player){
+        activePlayers.get(player).level++;
+        return activePlayers;
+    }
+
 
 }
