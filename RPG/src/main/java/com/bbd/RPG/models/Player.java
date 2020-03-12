@@ -5,15 +5,15 @@ import java.util.Random;
 public class Player extends GameCharacter{
 
     int maxHitPoints = 150;
-//    public Position position;
-//    public int health;
-//    public String name;
-//    public int level;
+    public Position position;
+    public int health;
+    public String name;
+    public int level;
 
 
-    public Player(Position position){
-//        this.name = name;
-//        this.level = 0;
+    public Player(String name, Position position){
+        this.name = name;
+        this.level = 1;
         this.position = position;
         this.hitPoints = maxHitPoints;
         this.experiencePoints = 0;

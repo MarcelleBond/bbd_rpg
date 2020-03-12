@@ -7,6 +7,7 @@ import com.bbd.RPG.models.stompmessages.InitializeMapIn;
 import com.bbd.RPG.services.MapService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONObject;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -32,13 +33,13 @@ public class MapController {
     }
     @MessageMapping("/initializeMap/{playerName}")
     @SendTo("/map/initialMap/{playerName}")
-    public Map initializeMap(InitializeMapIn size){
+    public Map initializeMap(@DestinationVariable String playerName, InitializeMapIn size){
         Map result = new HashMap();
         Character[][] map = mapService.generateMaze(size.x, size.y);
         Position playerPos = mapService.getMazeStartingPosition(map);
 
         RpgApplication.game.map = map;
-        RpgApplication.game.player = new Player(playerPos);
+        RpgApplication.game.player = new Player(playerName, playerPos);
 
         result.put("map", map);
         result.put("player", playerPos);
