@@ -10,6 +10,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
+import net.minidev.json.JSONObject;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
@@ -56,5 +58,15 @@ public class User {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         return passwordEncoder.matches(password, pword);
+    }
+
+    public JSONObject toJsonDto() {
+        JSONObject userDto = new JSONObject();
+        userDto.appendField("userID", userID);
+        userDto.appendField("email", email);
+        userDto.appendField("username", username);
+        userDto.appendField("level", level);
+        userDto.appendField("xp", xp);
+        return userDto;
     }
 }
