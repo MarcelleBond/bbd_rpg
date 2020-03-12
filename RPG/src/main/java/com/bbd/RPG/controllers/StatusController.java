@@ -23,6 +23,14 @@ public class StatusController {
         return String.format("Name: %s, Status: %s, Level: %s", statusIn.name, statusIn.status, statusIn.level);
     }
 
+    @MessageMapping("/player/move/{player}")
+    @SendTo("/player/active")
+    public Map<String, Player> updatePosition(@DestinationVariable String player, Position newPosition){
+        System.out.println(player);
+        activePlayers.get(player).position = newPosition;
+        return activePlayers;
+    }
+
     @MessageMapping("/join/{player}")
     @SendTo("/player/active")
     public Map<String, Player> playerJoined(@DestinationVariable String player){
