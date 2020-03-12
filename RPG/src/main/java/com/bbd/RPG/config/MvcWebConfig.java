@@ -18,10 +18,10 @@ import java.util.Locale;
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.bbd.RPG.controllers")
-public class MvcWebConfig implements WebMvcConfigurer  {
+public class MvcWebConfig implements WebMvcConfigurer {
     private ApplicationContext applicationContext;
 
-    public MvcWebConfig(ApplicationContext applicationContext){
+    public MvcWebConfig(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
@@ -43,7 +43,7 @@ public class MvcWebConfig implements WebMvcConfigurer  {
     }
 
     @Override
-    public void configureViewResolvers(ViewResolverRegistry registry){
+    public void configureViewResolvers(ViewResolverRegistry registry) {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
         resolver.setTemplateEngine(templateEngine());
         registry.viewResolver(resolver);
@@ -52,9 +52,8 @@ public class MvcWebConfig implements WebMvcConfigurer  {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-        registry
-                .addResourceHandler("/webjars/**")
-                .addResourceLocations("/webjars/")
-                .resourceChain(false);
+        registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/").resourceChain(false);
     }
+
+    
 }
