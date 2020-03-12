@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.bytebuddy.description.type.TypeDescription.Generic;
 import net.minidev.json.JSONObject;
 
 @RestController
@@ -46,7 +47,7 @@ public class UserRestController {
                 newpword.appendField("userID", user.get(0).getUserID());
                 newpword.appendField("pword", randompw);
                 userRepository.updateUser(newpword);
-                sendEmail(value.getAsString("email"), "New Password" ,"This is your new password -> " + randompw);
+                sendEmail(value.getAsString("email"), "New Password", "This is your new password -> " + randompw);
                 return "Check your email";
             } else
                 return "No such email found";
@@ -71,8 +72,8 @@ public class UserRestController {
     }
 
     @RequestMapping("/user/request/{userID}")
-    public Optional<User> getUserInformation(@PathVariable("userID") long userID) {
-        return userRepository.findById(userID);
+    public JSONObject getUserInformation(@PathVariable("userID") long userID) {
+        return userRepository.findById(userID).get().toJsonDto();
     }
 
     @PostMapping("/user/register")
@@ -104,7 +105,7 @@ public class UserRestController {
         return "Please enter email";
     }
 
-    private void sendEmail(String to,String subject, String message ) {
+    private void sendEmail(String to, String subject, String message) {
 
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(to);
@@ -116,30 +117,25 @@ public class UserRestController {
 
     }
 
-    private String getAlphaNumericString(int n) 
-    { 
-  
-        // chose a Character random from this String 
-        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                    + "0123456789"
-                                    + "abcdefghijklmnopqrstuvxyz"; 
-  
-        // create StringBuffer size of AlphaNumericString 
-        StringBuilder sb = new StringBuilder(n); 
-  
-        for (int i = 0; i < n; i++) { 
-  
-            // generate a random number between 
-            // 0 to AlphaNumericString variable length 
-            int index 
-                = (int)(AlphaNumericString.length() 
-                        * Math.random()); 
-  
-            // add Character one by one in end of sb 
-            sb.append(AlphaNumericString 
-                          .charAt(index)); 
-        } 
-  
-        return sb.toString(); 
-    } 
+    private String getAlphaNumericString(int n) {
+
+        // chose a Character random from this String
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" + "abcdefghijklmnopqrstuvxyz";
+
+        // create StringBuffer size of AlphaNumericString
+        StringBuilder sb = new StringBuilder(n);
+
+        for (int i = 0; i < n; i++) {
+
+            // generate a random number between
+            // 0 to AlphaNumericString variable length
+            int index = (int) (AlphaNumericString.length() * Math.random());
+
+            // add Character one by one in end of sb
+            sb.append(AlphaNumericString.charAt(index));
+        }
+
+        return sb.toString();
+    }
+
 }
