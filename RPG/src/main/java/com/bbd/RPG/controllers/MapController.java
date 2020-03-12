@@ -1,8 +1,7 @@
 package com.bbd.RPG.controllers;
 
 import com.bbd.RPG.RpgApplication;
-import com.bbd.RPG.models.Player;
-import com.bbd.RPG.models.Position;
+import com.bbd.RPG.models.*;
 import com.bbd.RPG.models.stompmessages.InitializeMapIn;
 import com.bbd.RPG.services.MapService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 @Controller
 @RequestMapping("")
