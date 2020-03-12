@@ -1,5 +1,7 @@
 package com.bbd.RPG.models;
 
+import com.bbd.RPG.RpgApplication;
+
 import java.util.Random;
 
 public class Enemy extends GameCharacter{
@@ -65,10 +67,11 @@ public class Enemy extends GameCharacter{
         this.hitPoints -= damage;
 
         if (this.hitPoints <= 0) {
-            this.hitPoints = 0;
-
             attacker.experiencePoints += dropExperiencePoints; // drop XP for the player
+
             // remove from enemy list
+            if (RpgApplication.game.enemies.contains(this))
+                RpgApplication.game.enemies.remove(this);
         }
     }
 }

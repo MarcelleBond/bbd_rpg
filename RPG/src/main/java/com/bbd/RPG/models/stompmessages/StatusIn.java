@@ -1,5 +1,10 @@
 package com.bbd.RPG.models.stompmessages;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class StatusIn {
     public String name;
     public String level;
@@ -11,27 +16,4 @@ public class StatusIn {
         this.status = status;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }
