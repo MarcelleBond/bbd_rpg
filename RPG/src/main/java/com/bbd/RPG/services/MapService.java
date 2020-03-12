@@ -1,9 +1,10 @@
 package com.bbd.RPG.services;
 
-import com.bbd.RPG.models.Position;
-import com.bbd.RPG.models.Vector;
+import com.bbd.RPG.models.*;
+import org.javatuples.Pair;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Tuple;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -43,6 +44,54 @@ public class MapService {
             }
         }
         return map;
+    }
+
+    public Pair<List<Item>, List<Enemy>> getItemsAndEnemies(Character[][] map){
+        List<Enemy> enemies = new ArrayList<>();
+        List<Item> items = new ArrayList<>();
+
+        int avaliableSpaces = 0;
+        for (Character[] characters : map) {
+            for (Character chars : characters) {
+                if (chars == '0')
+                    avaliableSpaces++;
+            }
+        }
+
+        // find avaliable space and add enemies to the map
+        int enemyAmount = (avaliableSpaces > 10) ? new Random().nextInt((int)(Math.ceil(avaliableSpaces / 10) + 1)) : 1; //new Random().nextInt((int)(Math.ceil(map.length / 3) + 1)) ;
+        avaliableSpaces -= enemyAmount;
+        System.out.println(enemyAmount);
+        while (enemyAmount >= 0) {
+            int xPosition = new Random().nextInt(map.length) ;
+            int yPosition = new Random().nextInt(map.length) ;
+
+            if (map[xPosition][yPosition] == '0')
+            {
+                Position position = new Position(xPosition, yPosition);
+                Enemy enemy = EnemyFactory.newEnemy(position);
+                if (enemy != null)
+                    enemies.add(enemy);
+                enemyAmount--;
+            }
+        }
+
+        // find avaliable space add items to the map
+        int itemAmount = (avaliableSpaces > 10) ? new Random().nextInt((int)(Math.ceil(avaliableSpaces / 10) + 1)) : 1; //new Random().nextInt((int)(Math.ceil(map.length / 3) + 1)) ;
+        while (itemAmount >= 0) {
+            int xPosition = new Random().nextInt(map.length) ;
+            int yPosition = new Random().nextInt(map.length) ;
+
+            if (map[xPosition][yPosition] == '0')
+            {
+                Position position = new Position(xPosition, yPosition);
+                Item item = ItemFactory.newItem(position);
+                if (item != null)
+                    items.add(item);
+                itemAmount--;
+            }
+        }
+        return Pair.with(items, enemies);
     }
 
     public Character[][] generateMaze(int width, int height) {

@@ -9,9 +9,10 @@ public class Player extends GameCharacter{
     public int health;
     public String name;
     public int level;
+    public GameMap map;
 
-
-    public Player(String name, Position position){
+    public Player(String name, Position position, GameMap map){
+        this.map = map;
         this.name = name;
         this.level = 1;
         this.position = position;
