@@ -31,20 +31,7 @@ public class MapController {
     public String test(){
         return "index";
     }
-    @MessageMapping("/initializeMap/{playerName}")
-    @SendTo("/map/initialMap/{playerName}")
-    public Map initializeMap(@DestinationVariable String playerName, InitializeMapIn size){
-        Map result = new HashMap();
-        Character[][] map = mapService.generateMaze(size.x, size.y);
-        Position playerPos = mapService.getMazeStartingPosition(map);
 
-        RpgApplication.game.map = map;
-        RpgApplication.game.player = new Player(playerName, playerPos);
-
-        result.put("map", map);
-        result.put("player", playerPos);
-        return result;
-    }
 
     @GetMapping("/rooms")
     public String rooms(Model model){

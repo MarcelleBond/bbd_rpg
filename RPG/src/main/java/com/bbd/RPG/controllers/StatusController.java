@@ -1,9 +1,13 @@
 package com.bbd.RPG.controllers;
 
+import com.bbd.RPG.RpgApplication;
 import com.bbd.RPG.models.Player;
 import com.bbd.RPG.models.Position;
+import com.bbd.RPG.models.stompmessages.InitializeMapIn;
 import com.bbd.RPG.models.stompmessages.StatusOut;
 import com.bbd.RPG.models.stompmessages.StatusIn;
+import com.bbd.RPG.services.MapService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -17,6 +21,25 @@ import java.util.Set;
 @Controller
 public class StatusController {
     private Map<String, Player> activePlayers = new HashMap<>();
+
+    @Autowired
+    MapService mapService;
+
+    @MessageMapping("/initializeMap/{playerName}")
+    @SendTo("/map/initialMap/{playerName}")
+    public Map initializeMap(@DestinationVariable String playerName, InitializeMapIn size){
+        Map result = new HashMap();
+        Character[][] map = mapService.generateMaze(size.x, size.y);
+        Position playerPos = mapService.getMazeStartingPosition(map);
+
+        RpgApplication.game.map = map;
+        RpgApplication.game.player = new Player(playerName, playerPos);
+
+        result.put("map", map);
+        result.put("player", playerPos);
+        return result;
+    }
+
     @MessageMapping("/status")
     @SendTo("/player/status")
     public String status(StatusIn statusIn) throws InterruptedException {
@@ -46,5 +69,6 @@ public class StatusController {
         activePlayers.remove(player);
         return activePlayers;
     }
+
 
 }
