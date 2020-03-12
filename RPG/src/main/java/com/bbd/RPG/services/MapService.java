@@ -63,10 +63,10 @@ public class MapService {
         avaliableSpaces -= enemyAmount;
         System.out.println(enemyAmount);
         while (enemyAmount >= 0) {
-            int xPosition = new Random().nextInt(map.length) ;
+            int xPosition = new Random().nextInt(map[0].length) ;
             int yPosition = new Random().nextInt(map.length) ;
 
-            if (map[xPosition][yPosition] == '0')
+            if (map[yPosition][xPosition] == '0')
             {
                 Position position = new Position(xPosition, yPosition);
                 Enemy enemy = EnemyFactory.newEnemy(position);
@@ -79,10 +79,10 @@ public class MapService {
         // find avaliable space add items to the map
         int itemAmount = (avaliableSpaces > 10) ? new Random().nextInt((int)(Math.ceil(avaliableSpaces / 10) + 1)) : 1; //new Random().nextInt((int)(Math.ceil(map.length / 3) + 1)) ;
         while (itemAmount >= 0) {
-            int xPosition = new Random().nextInt(map.length) ;
+            int xPosition = new Random().nextInt(map[0].length) ;
             int yPosition = new Random().nextInt(map.length) ;
 
-            if (map[xPosition][yPosition] == '0')
+            if (map[yPosition][xPosition] == '0')
             {
                 Position position = new Position(xPosition, yPosition);
                 Item item = ItemFactory.newItem(position);
