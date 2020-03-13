@@ -5,6 +5,7 @@ import java.util.Random;
 public class Player extends GameCharacter{
 
     int maxHitPoints = 150;
+    public int attackPoints = 50;
     public Position position;
     public int health;
     public String name;
