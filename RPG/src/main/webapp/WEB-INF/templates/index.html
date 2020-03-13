@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--/*@thymesVar id="message" type="java.lang.String"*/-->
+    <title th:text="${message}">Title</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="row">
+        <label for="name" style=" margin-left: 30px">Player name: </label><input type="text" name="name" id="name">
+        <button style="margin-left: 30px" id="connect" disabled>Connect</button>
+        <button id="disconnect" disabled>Disconnect</button>
+        <select type="text" name="tileset" id="tileset" value="retro">
+            <option value="retro">retro</option>
+            <option value="dungeon">dungeon</option>
+        </select>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <h1>Active players:</h1>
+            <ul id="statusList">
+                <li>hello</li>
+            </ul>
+        </div>
+        <div class="col-8">
+            <canvas id="canvas" width="1600" height="800"></canvas>
+        </div>
+    </div>
+    <!--/*@thymesVar id="map" type="java.util.List"*/-->
+</body>
+</html>
+
+<style>
+    .wall {
+        padding: 2px;
+        width: 5px;
+        color: black;
+        background-color: black;
+    }
+    .space {
+        color: green;
+        padding: 2px;
+        width: 5px;
+        background-color: green;
+    }
+</style>
+
+<script type="text/javascript" th:src="@{/webjars/jquery/3.1.1-1/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/sockjs-client/1.0.2/sockjs.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/stomp-websocket/2.3.3/stomp.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/axios/0.19.2/dist/axios.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/app.js}"></script>
