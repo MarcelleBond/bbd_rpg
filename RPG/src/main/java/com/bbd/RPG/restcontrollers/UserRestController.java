@@ -11,17 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import net.bytebuddy.description.type.TypeDescription.Generic;
 import net.minidev.json.JSONObject;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class UserRestController {
     @Autowired
@@ -68,7 +63,7 @@ public class UserRestController {
         if (check > 0)
             return "Update successful";
         else
-            return "Update failed";
+        return "Update failed";
     }
 
     @RequestMapping("/user/request/{userID}")
